@@ -1,13 +1,16 @@
-package main
 
-import (
-	"fmt"
-	"log"
-	"os"
+# html-go-img
 
-	"github.com/eterline/html-go-img/convert"
-)
+HTML to Image/PDF converter in go.
 
+`wkhtmltoimage` go wrapper linrary.
+
+
+## Exmaple
+
+code usage exmaple
+
+```go
 func main() {
 
 	// Creates converter object
@@ -38,3 +41,8 @@ func main() {
 	// HTML from string
 	c.StringPayload("<h1>Text<h1/>")
 }
+```
+## License
+
+[MIT](https://choosealicense.com/licenses/mit/)
+

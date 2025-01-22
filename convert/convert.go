@@ -25,12 +25,13 @@ const (
 )
 
 type HtmlConverter struct {
-	exec    *execute.Executer
-	payload []byte
-	output  []byte
+	exec    *execute.Executer // executable binary parameters
+	payload []byte            // input HTML
+	output  []byte            // output image/pdf data
 }
 
-func NewConverterImg(setters ...HtmlConverterOptionFunc) *HtmlConverter {
+// Create new image converter
+func NewConverterImg() *HtmlConverter {
 
 	args := []execute.BinArg{"q"}
 
@@ -42,6 +43,7 @@ func NewConverterImg(setters ...HtmlConverterOptionFunc) *HtmlConverter {
 	}
 }
 
+// Create new pdf converter. TODO: In process
 func NewConverterPdf() *HtmlConverter {
 	return &HtmlConverter{
 		exec: execute.NewExecuter(
@@ -51,14 +53,17 @@ func NewConverterPdf() *HtmlConverter {
 	}
 }
 
+// HTML content from string
 func (c *HtmlConverter) StringPayload(payload string) {
 	c.payload = []byte(payload)
 }
 
+// HTML content byte stream
 func (c *HtmlConverter) BytesPayload(payload []byte) {
 	c.payload = payload
 }
 
+// HTML content from io.Reader
 func (c *HtmlConverter) ReadPayload(r io.Reader) error {
 	bytes, err := io.ReadAll(r)
 	if err != nil {
@@ -68,12 +73,14 @@ func (c *HtmlConverter) ReadPayload(r io.Reader) error {
 	return nil
 }
 
+// HTML content from string
 func (c *HtmlConverter) WriteTo(w io.Writer) error {
 	_, err := w.Write(c.output)
 	return err
 }
 
-func (c *HtmlConverter) CreateFile(name string, ext ImageExt) error {
+// Creates new image file with name and path
+func (c *HtmlConverter) SaveFile(name string, ext ImageExt) error {
 
 	switch ext {
 	case PNG:
@@ -102,10 +109,12 @@ func (c *HtmlConverter) CreateFile(name string, ext ImageExt) error {
 	return nil
 }
 
-func (c *HtmlConverter) ToBase64(ext ImageExt) string {
+// Return base64 string
+func (c *HtmlConverter) ToBase64() string {
 	return base64.StdEncoding.EncodeToString(c.output)
 }
 
+// Make convert command
 func (c *HtmlConverter) Convert() error {
 	out, err := c.exec.ProcessConverter(c.payload)
 
@@ -113,6 +122,7 @@ func (c *HtmlConverter) Convert() error {
 	return err
 }
 
+// Output format bytes convert
 func (c *HtmlConverter) ToFormat(ext ImageExt) ([]byte, error) {
 
 	buf := new(bytes.Buffer)
