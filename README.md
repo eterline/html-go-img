@@ -3,12 +3,12 @@
 
 HTML to Image/PDF converter in go.
 
-`wkhtmltoimage` go wrapper linrary.
+`wkhtmltoimage` go wrapper library.
 
 
-## Exmaple
+## Example
 
-code usage exmaple
+code usage example
 
 ```go
 func main() {
